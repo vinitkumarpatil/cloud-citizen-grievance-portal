@@ -10,7 +10,9 @@ services:
     runtime: node
     plan: free
     region: singapore          # change to oregon/frankfurt if you prefer
-    buildCommand: npm --prefix client install && npm --prefix client run build && npm --prefix server install
+    # NODE_ENV=production makes npm skip devDependencies, but Vite (the client
+    # build tool) is a devDependency — so force-include dev deps for the build.
+    buildCommand: npm --prefix client install --include=dev && npm --prefix client run build && npm --prefix server install --omit=dev
     startCommand: npm --prefix server start
     healthCheckPath: /api/health
     envVars:
