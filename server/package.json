@@ -5,6 +5,9 @@
   "type": "module",
   "description": "Cloud-ready Citizen Grievance / Complaint Portal - REST API",
   "main": "src/index.js",
+  "engines": {
+    "node": ">=22.5.0"
+  },
   "scripts": {
     "start": "node --no-warnings src/index.js",
     "dev": "node --no-warnings --watch src/index.js",

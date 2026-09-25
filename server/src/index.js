@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
-import { config } from './config.js';
+import path from 'node:path';
+import fs from 'node:fs';
+import { config, ROOT } from './config.js';
 import './db.js'; // initialise the database + schema on import
 import { seedIfEmpty } from './seed.js';
 
@@ -27,6 +29,20 @@ app.get('/api/health', (req, res) =>
 app.use('/api/auth', authRoutes);
 app.use('/api/complaints', complaintRoutes);
 app.use('/api/admin', adminRoutes);
+
+// ---- Serve the built React app (single-service cloud deploy) ----
+// In production one process serves both the API and the static SPA, so the
+// whole portal lives at ONE shareable URL (no CORS, no separate frontend host).
+const clientDist = path.resolve(ROOT, '..', 'client', 'dist');
+if (fs.existsSync(path.join(clientDist, 'index.html'))) {
+  app.use(express.static(clientDist));
+  // SPA fallback: any non-API/non-upload GET returns index.html so React
+  // Router can resolve deep links (e.g. /admin, /track) on a hard refresh.
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api') || req.path.startsWith('/uploads')) return next();
+    res.sendFile(path.join(clientDist, 'index.html'));
+  });
+}
 
 app.use(notFound);
 app.use(errorHandler);

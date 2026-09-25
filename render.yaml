@@ -1,0 +1,22 @@
+# Render Blueprint — deploys the whole portal as ONE web service.
+# Express serves the built React app + the REST API from a single URL,
+# so you get one shareable link with a working backend (no CORS wiring).
+#
+# Deploy: https://dashboard.render.com  →  New +  →  Blueprint
+#         →  connect  vinitkumarpatil/cloud-citizen-grievance-portal  →  Apply
+services:
+  - type: web
+    name: cityfix-grievance-portal
+    runtime: node
+    plan: free
+    region: singapore          # change to oregon/frankfurt if you prefer
+    buildCommand: npm --prefix client install && npm --prefix client run build && npm --prefix server install
+    startCommand: npm --prefix server start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "24.14.0"
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true     # Render generates a strong secret for you
