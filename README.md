@@ -2,6 +2,8 @@
 
 A complete, demo-ready web portal where **citizens** report civic complaints (roads, water, electricity, sanitation…) and **city authorities** triage, assign, and resolve them from an admin dashboard. Built to run locally in minutes, with a clean path to cloud deployment.
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/vinitkumarpatil/cloud-citizen-grievance-portal)
+
 ---
 
 ## 🧭 Problem statement
